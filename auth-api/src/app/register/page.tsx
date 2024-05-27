@@ -1,7 +1,9 @@
 "use client";
 
 import Navbar from "@/components/navbar";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 
 export default function RegisterPage() {
@@ -10,6 +12,10 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const { data: session } = useSession();
+  if (session) redirect("/welcome");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -23,6 +29,41 @@ export default function RegisterPage() {
       setError("Please complete all inputs!");
       return;
     }
+
+    try {
+      // Check if the user is duplicate or not.
+      const resCheckUser = await fetch("http://localhost:3000/api/checkUser", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email }),
+      });
+      const { user } = await resCheckUser.json();
+
+      if (user) {
+        setError("User already exists!");
+      }
+
+      //create new user
+      if (!user) {
+        const res = await fetch("http://localhost:3000/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password }),
+        });
+
+        if (res.ok) {
+          const form = e.target as HTMLFormElement;
+          setError("");
+          setSuccess("User registration successfully!");
+          form.reset(); //<--- ให้ reset หลังจาก submit
+          // (e.target as HTMLFormElement).reset(); <--หรือแบบนี้ก็ได้
+        } else {
+          console.log("User registration failed");
+        }
+      }
+    } catch (error) {
+      console.log("Error during registration: ", error);
+    }
   };
 
   return (
@@ -35,6 +76,11 @@ export default function RegisterPage() {
           {error && (
             <div className="bg-red-500 w-fit text-sm text-white py-1 px-3 rounded-md mt-2">
               {error}
+            </div>
+          )}
+          {success && (
+            <div className="bg-green-500 w-fit text-sm text-white py-1 px-3 rounded-md mt-2">
+              {success}
             </div>
           )}
           <input
