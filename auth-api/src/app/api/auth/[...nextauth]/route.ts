@@ -14,10 +14,10 @@ const authOptions = {
       },
 
       async authorize(credentials, req) {
+        // ต้องใส่อันบนนี้ไม่งั้น const { email, password } = credentials; มันจะ error
         if (!credentials) {
           throw new Error("No credentials provided");
         }
-        // ต้องใส่อันบนนี้ไม่งั้น อันจะ error
         const { email, password } = credentials;
 
         try {
