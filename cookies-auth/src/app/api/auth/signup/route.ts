@@ -27,7 +27,11 @@ export async function POST(req: NextRequest) {
     setAuthCookies(authToken); //<---สมัครสมาชิกยังไม่จำเป็นต้องใส่ cookie ก็ได้
 
     return NextResponse.json(
-      { success: true, msg: "User logged in successfully" },
+      {
+        success: true,
+        msg: "User logged in successfully",
+        user: { name: newUser.name, email: newUser.email, _id: newUser._id },
+      },
       { status: 201 }
     );
   } catch (error) {

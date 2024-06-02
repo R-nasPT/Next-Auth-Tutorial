@@ -8,17 +8,18 @@ import { validateSignData } from "@/lib/validator";
 import InfoText from "./InfoText";
 import axios, { AxiosError } from "axios";
 import { isObjectEmpty } from "@/helper/client-helper";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import ErrorText from "../common/ErrorText";
+import { useAuthContext } from "@/app/contexts/AuthContext";
 
 export default function SignUp() {
-  const router = useRouter();
   const [data, setData] = useState<SignUpFromInput>({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+  const { user, setUser } = useAuthContext();
 
   const [validationError, setValidationError] = useState<InputError>({});
   const [submitError, setSubmitError] = useState<string>("");
@@ -44,7 +45,7 @@ export default function SignUp() {
         );
         if (apiRes.data?.success) {
           setSubmitError("");
-          router.push("/profile");
+          setUser(apiRes.data.user)
         }
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -54,6 +55,8 @@ export default function SignUp() {
       }
     }
   };
+
+  if (user) redirect("/profile");
 
   return (
     <div className={styles.container}>

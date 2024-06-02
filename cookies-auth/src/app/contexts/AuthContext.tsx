@@ -27,13 +27,14 @@ export function AuthContextProvider({ children }: AuthContexProviderProps) {
         const apiRes = await axios.get(
           "http://localhost:3000/api/user/profile"
         );
-        if (apiRes.data.success) {
+        if (apiRes?.data?.success) {
           setUser(apiRes.data.user);
         }
       } catch (error) {
         router.push("/login");
       }
     };
+    getProfile();
   }, []);
 
   return (

@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     const authToken = jwt.sign({ _id: user._id }, JWT_TOKEN as string, {
       expiresIn: "7d",
     });
-    
+
     cookies().set({
       name: "auth-token",
       value: authToken,
@@ -55,7 +55,11 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(
-      { success: true, msg: "User logged in successfully" },
+      {
+        success: true,
+        msg: "User logged in successfully",
+        user: { name: user.name, email: user.email, _id: user._id },
+      },
       { status: 201 }
     );
   } catch (error) {

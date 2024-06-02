@@ -8,15 +8,16 @@ import InfoText from "./InfoText";
 import { validateLoginData } from "@/lib/validator";
 import { isObjectEmpty } from "@/helper/client-helper";
 import axios, { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import ErrorText from "../common/ErrorText";
+import { useAuthContext } from "@/app/contexts/AuthContext";
 
 export default function Login() {
-  const router = useRouter();
   const [data, setData] = useState<LoginForm>({
     email: "",
     password: "",
   });
+  const { user, setUser } = useAuthContext();
 
   const [validationError, setValidationError] = useState<InputError>({});
   const [submitError, setSubmitError] = useState<string>("");
@@ -42,9 +43,8 @@ export default function Login() {
         );
         if (apiRes.data?.success) {
           setSubmitError("");
-          router.push("/profile");
-        } 
-
+          setUser(apiRes.data.user);
+        }
       } catch (error) {
         if (error instanceof AxiosError) {
           const errorMsg = error.response?.data?.error;
@@ -53,6 +53,8 @@ export default function Login() {
       }
     }
   };
+
+  if (user) redirect("/profile");
 
   return (
     <div className={styles.container}>
