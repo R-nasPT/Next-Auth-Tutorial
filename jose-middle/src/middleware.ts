@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
 
     //แนบ header เพื่อเอาไปใช้ยัง component อื่นๆ
     const requestHeaders = new Headers(request.headers);
-    requestHeaders.set("user", JSON.stringify({ email: payload.email })); //<-- เหมือนกับการ set cookie หรือ localstorage
+    requestHeaders.set("user", JSON.stringify({ email: payload.email })); //<-- เหมือนกับการ set cookie หรือ localstorage แต่เป็นการ set ไปที่ Headers
 
     const response = NextResponse.next({
       request: {
