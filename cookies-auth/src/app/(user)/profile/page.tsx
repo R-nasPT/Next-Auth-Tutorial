@@ -2,7 +2,6 @@
 import { useAuthContext } from "@/app/contexts/AuthContext";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React from "react";
 
 export default function ProfilePage() {
   const { user, setUser } = useAuthContext();
