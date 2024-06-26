@@ -3,7 +3,7 @@ import authConfig from "./auth.config";
 
 const { auth: middleware } = NextAuth(authConfig);
 
-export default middleware((req) => { //<--แค่นี้ก็ใช้ได้แล้วถ้ากำหนดใน auth.config.ts
+export default middleware((req) => { //<--แค่นี้ก็ใช้ได้แล้วถ้ากำหนดใน auth.config.ts โดยไม่ต้องกำหนดการเช็ก authen ข้างใน {}
   // const isLoggedIn = !!req.auth;
   // console.log("ROUTE :", req.nextUrl.pathname);
   // console.log("Middleware", isLoggedIn);
