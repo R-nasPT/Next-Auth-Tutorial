@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function login(
-  prevState: { message: string },
+  previousState: { message: string },
   formData: FormData
 ) {
   const email = formData.get("email");
