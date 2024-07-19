@@ -35,6 +35,8 @@ export const authOptions: NextAuthConfig = {
   secret: process.env.AUTH_SECRET,
   session: {
     strategy: "jwt",
+    maxAge: 7 * 24 * 60 * 60, //<-- กำหนดให้ token หมดอายุหลังจาก login มาแล้ว 7 วัน
+    // maxAge: 60, <-- นาที
   },
   callbacks: {
     jwt: async ({ token, user }) => {
